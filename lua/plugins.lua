@@ -67,6 +67,11 @@ local plugins = {
       -- 'hrsh7th/vim-vsnip', -- Comment out if not using snippets
     },
   },
+  {
+    'nvim-telescope/telescope.nvim',
+    requires = { {'nvim-lua/plenary.nvim'} }
+  }
+
 
   -- Add more plugins as needed
 }
