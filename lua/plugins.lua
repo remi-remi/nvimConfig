@@ -1,5 +1,3 @@
--- plugins.lua
-
 -- Bootstrap lazy.nvim plugin manager
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
 if not vim.loop.fs_stat(lazypath) then
@@ -26,22 +24,22 @@ local plugins = {
   {
     'neovim/nvim-lspconfig',
   },
-    -- nvim-tree.lua pour l'explorateur de fichiers
-{
-  'nvim-tree/nvim-tree.lua',
-  dependencies = {
-    'nvim-tree/nvim-web-devicons',
+  -- nvim-tree.lua pour l'explorateur de fichiers
+  {
+    'nvim-tree/nvim-tree.lua',
+    dependencies = {
+      'nvim-tree/nvim-web-devicons',
+    },
+    config = function()
+      require('nvim-tree').setup(require('nvim-tree-config'))
+    end,
   },
-  config = function()
-    require('nvim-tree').setup(require('nvim-tree-config'))
-  end,
-},
--- Plugin pour les icônes
-{
-  'nvim-tree/nvim-web-devicons',
-  lazy = true,
-},
--- Mason for managing LSP servers
+  -- Plugin pour les icônes
+  {
+    'nvim-tree/nvim-web-devicons',
+    lazy = true,
+  },
+  -- Mason for managing LSP servers
   {
     'williamboman/mason.nvim',
     config = function()
@@ -63,17 +61,28 @@ local plugins = {
       'hrsh7th/cmp-buffer',
       'hrsh7th/cmp-path',
       'hrsh7th/cmp-cmdline',
-      -- 'hrsh7th/cmp-vsnip', -- Comment out if not using snippets
-      -- 'hrsh7th/vim-vsnip', -- Comment out if not using snippets
     },
   },
   {
     'nvim-telescope/telescope.nvim',
     requires = { {'nvim-lua/plenary.nvim'} }
+  },
+  -- Plugins pour la gestion des couleurs
+  {
+    "ap/vim-css-color",
+  },
+  {
+    "NvChad/nvim-colorizer.lua",
+    config = function()
+      require("colorizer").setup()
+    end
+  },
+  {
+    "max397574/colortils.nvim",
+    config = function()
+      require("colortils").setup()
+    end
   }
-
-
-  -- Add more plugins as needed
 }
 
 -- Set up lazy.nvim with the plugins

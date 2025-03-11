@@ -19,7 +19,7 @@ return {
   },
   -- Configuration de l'affichage
   view = {
-    width = 30,
+    width = 35,
     side = 'left',
     -- Vous pouvez retirer 'mappings' ici
   },

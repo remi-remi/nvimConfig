@@ -17,3 +17,9 @@ require('lsp.bash')
 require('lsp.ruby')
 require('lsp.lua')
 require('lsp.java')
+
+-- Undo persistance
+-- run mkdir -p ~/.local/state/nvim/undo
+vim.opt.undofile = true
+vim.opt.undodir = vim.fn.stdpath("state") .. "/undo"
+
