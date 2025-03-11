@@ -35,15 +35,22 @@ cmp.setup({
     format = function(entry, vim_item)
       -- Shortened labels for better readability
       local kind_labels = {
-        Text = "txt", Method = "m()", Function = "󰊕", Constructor = "cnstrctr",
+        Text = "", Method = "m()", Function = "󰊕", Constructor = "cnstrctr",
         Field = "󰗧", Variable = "", Class = "cls", Interface = "intrfc",
         Module = "mod", Property = "", Unit = "unit", Value = "val",
-        Enum = "enum", Keyword = "kwrd", Snippet = "", Color = "",
+        Enum = "enum", Keyword = "kwrd",  Color = "",
         File = "", Reference = "ref", Folder = "", EnumMember = "enuMbr",
         Constant = "", Struct = "struct", Event = "󰯪", Operator = "",
         TypeParameter = "tparam"
       }
-      vim_item.kind = kind_labels[vim_item.kind] or vim_item.kind
+
+       -- If the item is a snippet, make sure it's labeled correctly
+      if vim_item.kind == "Snippet" then
+        vim_item.kind = ""  -- Assign the snippet icon
+      else
+        vim_item.kind = kind_labels[vim_item.kind] or vim_item.kind
+      end
+
       vim_item.menu = ({
         lsp = "",   -- LSP icon
         buffer = "󰅍", -- Buffer icon
