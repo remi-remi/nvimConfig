@@ -1,13 +1,27 @@
+vim.g.clipboard = {
+    name = 'wl-clipboard',
+    copy = {
+        ['+'] = 'wl-copy --type text/plain',
+        ['*'] = 'wl-copy --type text/plain',
+    },
+    paste = {
+        ['+'] = 'wl-paste --no-newline',
+        ['*'] = 'wl-paste --no-newline',
+    },
+    cache_enabled = 1,
+}
 
--- Copier dans le presse-papier système
-vim.api.nvim_set_keymap('v', '<C-c>', '"+y', { noremap = true, silent = false })
-vim.api.nvim_set_keymap('n', '<C-c>', '"+yy', { noremap = true, silent = false })
+
+-- Mapping pour copier/coller avec Ctrl+Maj+C/V
+vim.api.nvim_set_keymap('v', '<C-c>', '"+y', { noremap = true, silent = true }) -- Copier en mode visuel
+vim.api.nvim_set_keymap('n', '<C-c>', '"+yy', { noremap = true, silent = true }) -- Copier une ligne en mode normal
+
 
 -- keymaps.lua
-local opts = { noremap = true, silent = true }
+--local opts = { noremap = true, silent = true }
 
 -- Example key mapping for saving (should i remove it ?)
-vim.api.nvim_set_keymap('n', '<Leader>w', ':w<CR>', opts)
+--vim.api.nvim_set_keymap('n', '<Leader>w', ':w<CR>', opts)
 
 -- Project explorer
 vim.api.nvim_set_keymap('n', '<Leader>e', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
