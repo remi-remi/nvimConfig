@@ -1,25 +1,22 @@
 -- Load plugins
-require('plugins')
--- Load settings
-require('settings')
+require("plugins.init")
 
-vim.cmd('colorscheme tokyonight')
+-- Load core settings
+require("core.settings")
+require("core.theme")
+require("core.adoc-compile-on-save").setup()
+require("core.diagnostic-config")
+require("core.createDirOnSaveIfNotExist")
+require("core.jsconfig-auto").ensure_jsconfig()
+require("core.wl-tools")
 
-require('keymaps')
+-- Load LSP
+require("lsp.init")
 
-require('completion')
-require('fr')
+-- Load grammar/language tools
+-- require("lang.fr")
 
--- Load LSP configurations
-require('lsp')
-require('lsp.web_dev')
-require('lsp.bash')
-require('lsp.ruby')
-require('lsp.lua')
-require('lsp.java')
+-- Theme (à activer après plugin tokyonight ou onedark)
+-- vim.cmd("colorscheme onedark")
 
--- Undo persistance
--- run mkdir -p ~/.local/state/nvim/undo
-vim.opt.undofile = true
-vim.opt.undodir = vim.fn.stdpath("state") .. "/undo"
-
+require("keymaps.init")
