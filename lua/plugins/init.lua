@@ -19,7 +19,8 @@ require("lazy").setup({
    require("plugins.mason"),
    require("plugins.mason-lspconfig"),
    require("plugins.completion"),
-   require("plugins.telescope");
-   require("plugins.lualine")
+   require("plugins.telescope"),
+   require("plugins.lualine"),
+   require("plugins.prettier")
 })
 

@@ -1,18 +1,41 @@
 local M = {}
 
 function M.compile_adoc()
-  -- Récupère le chemin absolu du fichier adoc courant
   local file = vim.fn.expand("%:p")
-  -- Construit le chemin absolu vers le fichier theme.yml situé dans le même répertoire que le fichier adoc
-  local theme = vim.fn.fnamemodify(file, ':h') .. '/theme.yml'
-  -- Construit la commande de compilation en utilisant le thème absolu
-  local cmd = "asciidoctor-pdf -a pdf-theme=" .. theme .. " " .. file
+  local basedir = vim.fn.fnamemodify(file, ':h')
+  local theme = basedir .. '/theme.yml'
+  local fonts = basedir .. '/fonts'
 
-  -- Tables pour capturer la sortie standard et d'erreur
+  -- Commence la commande avec les attributs nécessaires pour activer les blocs ifdef dans le .adoc
+  local cmd = {
+    "asciidoctor-pdf",
+    "-a", "env-gem"
+  }
+
+  -- Ajoute -a dir-fonts seulement si le dossier fonts existe
+  if vim.fn.isdirectory(fonts) == 1 then
+    table.insert(cmd, "-a")
+    table.insert(cmd, "dir-fonts")
+  end
+
+  -- Ajoute le thème
+  if vim.fn.filereadable(theme) == 1 then
+    table.insert(cmd, "-a")
+    table.insert(cmd, "pdf-themesdir=" .. basedir)
+    table.insert(cmd, "-a")
+    table.insert(cmd, "pdf-theme=theme.yml")
+  end
+
+  -- Ajoute le fichier source
+  table.insert(cmd, file)
+
+  -- Convertit en chaîne
+  local full_cmd = table.concat(cmd, " ")
+
   local stdout_lines = {}
   local stderr_lines = {}
 
-  vim.fn.jobstart(cmd, {
+  vim.fn.jobstart(full_cmd, {
     stdout_buffered = true,
     stderr_buffered = true,
     on_stdout = function(_, data)

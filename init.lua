@@ -5,10 +5,11 @@ require("plugins.init")
 require("core.settings")
 require("core.theme")
 require("core.adoc-compile-on-save").setup()
-require("core.diagnostic-config")
+    require("core.diagnostic-config")
 require("core.createDirOnSaveIfNotExist")
-require("core.jsconfig-auto").ensure_jsconfig()
+    require("core.jsconfig-auto").ensure_jsconfig()
 require("core.wl-tools")
+require("core.formatOnSave")
 
 -- Load LSP
 require("lsp.init")
