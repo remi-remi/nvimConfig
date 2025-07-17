@@ -22,5 +22,6 @@ require("lazy").setup({
    require("plugins.telescope"),
    require("plugins.lualine"),
    require("plugins.prettier"),
-   require("plugins.vim-visual-multi")
+   require("plugins.vim-visual-multi"),
+   require("plugins.precognition")
 })
