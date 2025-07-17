@@ -1,5 +1,5 @@
 // ❌ 1. Propriété inexistante sur `console`
-console.lug("should warn me that .lug is not a function");
+console.lung("should warn me that .lug is not a function");
 //           ~~~  Property 'lug' does not exist on type 'Console'.
 
 // ❌ 2. Appel de fonction inconnue
@@ -26,7 +26,7 @@ let x = 10;
 
 // ❌ 7. Mauvaise fonction async
 async function broken() {
-  await 123;
-  //      ~~~  'await' expression is only allowed for Promises
+   await 123;
+   //      ~~~  'await' expression is only allowed for Promises
 }
 
