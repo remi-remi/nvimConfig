@@ -30,4 +30,4 @@ async function functionToExport() {
    //      ~~~  'await' expression is only allowed for Promises
 }
 
-export default functionToExport;
+export { functionToExport }
