@@ -19,29 +19,7 @@ local function update_import_path(old_import_path, importer_file, old_export_pat
    print("update import path")
    print("importer_file used by path resolver : " .. importer_file .. " old_import_path : " .. old_import_path)
 
-   local resolved_old = pathResolver.resolve_relative_to_base(importer_file, old_import_path)
-
-   local normalized_resolved_old = vim.fn.resolve(resolved_old or "")
-   local normalized_old_export = vim.fn.resolve(old_export_path)
-
-   if not normalized_resolved_old or normalized_resolved_old ~= normalized_old_export then
-      print("cancel, resolved_old undefined or != old_export_path")
-      print("resolved_old: " .. normalized_resolved_old)
-      print("old_export_path: " .. normalized_old_export)
-      return nil
-   end
-
-   local importer_dir = vim.fn.fnamemodify(importer_file, ":h")
-   local relative_path = vim.fn.fnamemodify(new_export_path, ":~:.")
-   local cleaned = relative_path:gsub(importer_dir, ""):gsub("^/", "")
-   local simplified = vim.fn.simplify(cleaned)
-   local rel_to_importer = vim.fn.fnamemodify(simplified, ":r")
-
-   if not rel_to_importer:match("^%.?/") then
-      rel_to_importer = "./" .. rel_to_importer
-   end
-
-   local new_relative_path = rel_to_importer .. ".js"
+   local new_relative_path = pathResolver.relative_path(importer_file, new_export_path)
    print("! *  Updating import path from: '" .. old_import_path .. "' → '" .. new_relative_path .. "'")
    return new_relative_path
 end

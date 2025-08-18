@@ -1,12 +1,15 @@
 local M = {}
 
--- Trouve tous les fichiers JS/JSX qui importent un fichier contenant `target_name` dans le chemin d'import
+-- Trouve tous les fichiers JS/JSX/TS/TSX qui importent un fichier contenant `target_name` dans le chemin d'import
 M.find_candidates = function(target_name)
    print("---- searching possible import of " .. target_name .. " using grep..")
+
+   local target_no_ext = target_name:gsub("%.[jt]sx?$", "")
    local cmd = string.format(
-      "grep -rn --include=*.js --include=*.jsx 'from .*%s' .",
-      target_name
+      "grep -rn --include=*.js --include=*.jsx --include=*.ts --include=*.tsx 'from .*%s' . || true",
+      target_no_ext
    )
+
 
    local results = vim.fn.systemlist(cmd)
    local candidates = {}
@@ -25,6 +28,7 @@ M.find_candidates = function(target_name)
          end
       end
    end
+
    print("\n")
    return candidates
 end

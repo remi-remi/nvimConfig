@@ -12,7 +12,7 @@ M.get_exported_name = function(filepath)
    if name then return name end
 
    -- match: export default NAME;
-   name = content:match("export%s+default%s+([%w_]+)%s*;")
+   name = content:match("export%s+default%s+([%w_]+)%s*;?")
    if name then return name end
 
    return nil
