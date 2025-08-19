@@ -16,6 +16,7 @@ require("lazy").setup({
    require("plugins.nvim-web-devicons"),
    require("plugins.nvim-tree"),
    require("plugins.nvim-colorizer"),
+   require("plugins.nvim-treesitter"),
    require("plugins.mason"),
    require("plugins.mason-lspconfig"),
    require("plugins.completion"),
