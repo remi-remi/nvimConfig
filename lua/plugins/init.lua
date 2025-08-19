@@ -11,6 +11,7 @@ vim.opt.rtp:prepend(lazypath)
 
 -- Load plugins
 require("lazy").setup({
+   require("plugins.indent-blankline"),
    require("plugins.oneDark"),
    require("plugins.tokyonight"),
    require("plugins.nvim-web-devicons"),
