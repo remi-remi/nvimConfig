@@ -17,7 +17,4 @@ require("lsp.init")
 -- Load grammar/language tools
 -- require("lang.fr")
 
--- Theme (à activer après plugin tokyonight ou onedark)
--- vim.cmd("colorscheme onedark")
-
 require("keymaps.init")

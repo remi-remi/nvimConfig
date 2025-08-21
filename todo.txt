@@ -1,23 +1,19 @@
 the prev todo seem lost
 - lsp
-   - ts
    - sql?
 
 - alias
    - copy document CD
    - replace document RD
 
-- folow the path
-
 - integration
    - complete the jsx with props or reconise them on lsp <p1:"" p2:""/>
 
 - tool
-   camelize or decameliez var name
+   camelize or decameliez var name ?
+
+- check why two lsp are running at the same time
 
 ---
 ESLINT :
-   react/jsx-no-bind -> warn if < prop={func()} /> witch will call the f() foreach render
    force extension in import path
-
-   warn if async function is used as argument (can be vry confusing)
