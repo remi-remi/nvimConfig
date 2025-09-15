@@ -1,5 +1,3 @@
--- plugins/config/completion-config.lua
-
 local cmp = require("cmp")
 -- Setup for `/`
 cmp.setup.cmdline('/', {
