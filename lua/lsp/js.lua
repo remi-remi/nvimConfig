@@ -43,6 +43,7 @@ lspconfig.vtsls.setup({
          },
       },
       javascript = {
+         inlayHints = { parameterNames = { enabled = "all" } },
          format = {
             enable = true,
          },

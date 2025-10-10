@@ -5,7 +5,7 @@ return {
    config = function()
       require("tokyonight").setup({
          style = "moon", -- 'storm', 'night', 'moon', 'day'
-         transparent = true,
+         transparent = false,
          terminal_colors = true,
          styles = {
             sidebars = "transparent",

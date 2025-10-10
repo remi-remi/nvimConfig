@@ -27,6 +27,7 @@ require("lazy").setup({
    require("plugins.vim-visual-multi"),
    require("plugins.precognition"),
    require("plugins.lua-snip"),
+   require("plugins.lspsaga")
 })
 
 require("plugins.convertDefaultToNamed")
