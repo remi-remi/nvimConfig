@@ -7,14 +7,36 @@ cmp.setup.cmdline('/', {
    }
 })
 
+-- filename source
+
+local filename_source = {}
+
+filename_source.new = function()
+   local self = setmetatable({}, { __index = filename_source })
+   return self
+end
+
+function filename_source:complete(_, callback)
+   local filename = vim.fn.expand("%:t:r")
+   callback({
+      { label = filename, kind = cmp.lsp.CompletionItemKind.File },
+   })
+end
+
+cmp.register_source("filename", filename_source.new())
+--
+
 -- Setup for `:`
 cmp.setup.cmdline(':', {
    mapping = cmp.mapping.preset.cmdline(),
    sources = cmp.config.sources({
-      { name = 'path' },
       { name = 'cmdline' },
+      { name = 'nvim_lsp' },
+      { name = 'luasnip' },
       { name = 'buffer' },
-   })
+      { name = 'path' },
+      { name = 'filename' },
+   }),
 })
 
 return {
@@ -50,6 +72,7 @@ return {
       { name = 'luasnip' },
       { name = 'buffer' },
       { name = 'path' },
+      { name = 'filename' }
    }),
 
    experimental = {

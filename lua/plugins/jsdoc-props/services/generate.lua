@@ -1,5 +1,6 @@
 -- services/generate.lua
--- Generates or updates a JSDoc block for component props (preserves inline comments).
+-- Generates or updates a typedef-only JSDoc for React components,
+-- plus a separate @type {React.FC<Props>} line for VTSLS JSX completion.
 
 local utils = require("plugins.jsdoc-props.utils.buffer")
 local formatter = require("plugins.jsdoc-props.services.formatter")
@@ -12,121 +13,66 @@ local M = {}
 
 local function get_component_name(line)
    local name = line:match("([A-Z][%w_]*)%s*=")
-   if not name then name = line:match("function%s+([A-Z][%w_]*)") end
+   if not name then
+      name = line:match("function%s+([A-Z][%w_]*)")
+   end
+   -- new: support export function and React.memo
+   if not name then
+      name = line:match("export%s+function%s+([A-Z][%w_]*)")
+   end
+   if not name then
+      name = line:match("React%.memo%s*%(%s*function%s*([A-Z][%w_]*)")
+   end
    return name
 end
 
--- Split a jsdoc into header / params / footer
-local function parse_jsdoc_block(lines)
-   local header, params, footer = {}, {}, {}
-   local mode = "header"
+
+-- Return a unique, stable-ordered list of prop tables {name=...}
+local function unique_props(props)
+   local seen, out = {}, {}
+   for _, p in ipairs(props) do
+      if p.name and not seen[p.name] then
+         table.insert(out, { name = p.name })
+         seen[p.name] = true
+      end
+   end
+   return out
+end
+
+-- Parse existing typedef block to get current property names
+local function parse_typedef_block(lines)
+   local props = {}
    for _, l in ipairs(lines) do
-      if l:match("^%s*%*%s*@param") then
-         mode = "params"
-         table.insert(params, l)
-      elseif mode == "params" then
-         table.insert(footer, l)
-      else
-         table.insert(header, l)
-      end
+      local nm = l:match("@property%s+{[^}]+}%s+([%w_]+)")
+      if nm then table.insert(props, nm) end
    end
-   return header, params, footer
+   return props
 end
 
--- Extract inner keys and trailing comment from grouped param
-local function parse_grouped_param(line)
-   local inner, trailing = line:match("{{(.-)}}(.*)")
-   local names = {}
-   if inner then
-      for name in inner:gmatch("([%a_][%w_]*)%s*:") do
-         table.insert(names, name)
-      end
+-- Build typedef JSDoc (marker + typedef + properties) — NO @type here
+local function build_typedef_block(component_name, props)
+   local typedef_name = component_name .. "Props"
+   local lines = {}
+   table.insert(lines, "/**")
+   table.insert(lines, " * ! autoUpdate " .. component_name .. " params !")
+   table.insert(lines, (" * @typedef {Object} %s"):format(typedef_name))
+   for _, p in ipairs(props) do
+      table.insert(lines, (" * @property {any} %s"):format(p.name))
    end
-   return names, (trailing and trailing:match("^%s*(.-)%s*$") or "")
+   table.insert(lines, " */")
+   return lines
 end
 
--- Build updated jsdoc depending on style
-local function build_updated_jsdoc(jsdoc_lines, props, component_name)
-   local header, old_params, footer = parse_jsdoc_block(jsdoc_lines)
+-- Build the separate @type {React.FC<Props>} annotation (one single-line block)
+local function build_type_line(component_name)
+   local typedef_name = component_name .. "Props"
+   return { ("/** @type {React.FC<%s>} */"):format(typedef_name) }
+end
 
-   local has_marker = false
-   for _, l in ipairs(header) do
-      if l:match("!%s*autoUpdate%s+" .. component_name) then
-         has_marker = true
-         break
-      end
-   end
-   if not has_marker then
-      table.insert(header, 2, " * ! autoUpdate " .. component_name .. " params !")
-   end
-
-   local result = {}
-   local first_param_line = old_params[1] or ""
-
-   if first_param_line:match("{{") then
-      -------------------------------------------------------------------
-      -- Grouped object-style param update  (preserve clean inline comment)
-      -------------------------------------------------------------------
-      local existing_names, trailing_comment = parse_grouped_param(first_param_line)
-
-      -- remove repeated "props" tokens and excess spaces from trailing comment
-      if trailing_comment ~= "" then
-         trailing_comment = trailing_comment:gsub("%s*props%s*", "")
-         trailing_comment = trailing_comment:gsub("%s+", " "):match("^%s*(.-)%s*$") or ""
-      end
-
-      local current_names = {}
-      for _, p in ipairs(props) do
-         current_names[p.name] = true
-      end
-
-      local merged = {}
-      for _, name in ipairs(existing_names) do
-         if current_names[name] then
-            table.insert(merged, name .. ": any")
-         end
-      end
-      for _, p in ipairs(props) do
-         if not vim.tbl_contains(existing_names, p.name) then
-            table.insert(merged, p.name .. ": any")
-         end
-      end
-
-      local line = string.format(" * @param {{ %s }} props", table.concat(merged, ", "))
-      if trailing_comment ~= "" then
-         line = line .. "  " .. trailing_comment
-      end
-      table.insert(result, line)
-   else
-      -------------------------------------------------------------------
-      -- Flat param update
-      -------------------------------------------------------------------
-      local existing = {}
-      for _, line in ipairs(old_params) do
-         local n, t, desc = line:match("@param%s+{([^}]+)}%s+([%w_]+)%s*(.*)")
-         if n and t then existing[t] = { type = n, text = desc } end
-      end
-
-      for _, prop in ipairs(props) do
-         local ex = existing[prop.name]
-         local t = (ex and ex.type ~= "any") and ex.type or "any"
-         local d = ex and ex.text or ""
-         table.insert(result, string.format(" * @param {%s} %s%s", t, prop.name, (#d > 0 and " " .. d or "")))
-      end
-   end
-
-   local cleaned_footer = {}
-   for _, l in ipairs(footer) do
-      if not l:match("^%s*%*/%s*$") then table.insert(cleaned_footer, l) end
-   end
-
-   local final_lines = {}
-   vim.list_extend(final_lines, header)
-   vim.list_extend(final_lines, result)
-   vim.list_extend(final_lines, cleaned_footer)
-   table.insert(final_lines, " */")
-
-   return final_lines
+-- Update an existing typedef block (rewrite entirely from fresh props)
+local function update_typedef_block(jsdoc_lines, props, component_name)
+   local merged = unique_props(props)
+   return build_typedef_block(component_name, merged)
 end
 
 ---------------------------------------------------------------------
@@ -149,36 +95,55 @@ function M.run()
       vim.notify("[jsdoc-props] No props detected for " .. component_name, vim.log.levels.WARN)
       return
    end
+   props = unique_props(props)
 
    local jsdoc_start = utils.find_existing_jsdoc(current_line)
    if jsdoc_start then
+      -- Update existing block (must be ours: marker + same component)
       local block = utils.get_text_block(jsdoc_start, current_line - 1)
       local jsdoc_lines = type(block) == "string" and vim.split(block, "\n") or block
       local jsdoc_text = table.concat(jsdoc_lines, "\n")
 
-      if not jsdoc_text:match("!%s*autoUpdate%s+" .. component_name) then
+      if not jsdoc_text:match("!%s*autoUpdate%s+" .. component_name .. "%s+params%s*!") then
          vim.notify("[jsdoc-props] Existing JSDoc found but not owned (missing marker or wrong name).",
             vim.log.levels.ERROR)
          return
       end
 
-      local updated = build_updated_jsdoc(jsdoc_lines, props, component_name)
-      vim.api.nvim_buf_set_lines(bufnr, jsdoc_start - 1, current_line - 1, false, updated)
-      vim.notify("[jsdoc-props] Updated JSDoc params for " .. component_name, vim.log.levels.INFO)
+      -- Rewrite typedef block
+      local updated_typedef = update_typedef_block(jsdoc_lines, props, component_name)
+      -- Commit updated typedef
+      vim.api.nvim_buf_set_lines(bufnr, jsdoc_start - 1, current_line - 1, false, updated_typedef)
+
+      -- Ensure the @type line exists just after the typedef block
+      local type_line = build_type_line(component_name)
+      -- Insert the @type line if the next non-empty line is not already an @type
+      local after = jsdoc_start - 1 + #updated_typedef
+      local next_line = vim.api.nvim_buf_get_lines(bufnr, after, after + 1, false)[1] or ""
+      if not next_line:match("@type%s+{React%.FC<" .. component_name .. "Props>}") then
+         vim.api.nvim_buf_set_lines(bufnr, after, after, false, type_line)
+      end
+
+      vim.notify("[jsdoc-props] Updated typedef for " .. component_name, vim.log.levels.INFO)
    else
-      local jsdoc_lines = formatter.build_jsdoc(props)
-      table.insert(jsdoc_lines, 2, " * ! autoUpdate " .. component_name .. " params !")
-      vim.api.nvim_buf_set_lines(bufnr, current_line - 1, current_line - 1, false, jsdoc_lines)
-      vim.notify("[jsdoc-props] Generated new JSDoc for " .. component_name, vim.log.levels.INFO)
+      -- Fresh generation: typedef block then separate @type line
+      local typedef_block = build_typedef_block(component_name, props)
+      local type_line = build_type_line(component_name)
+      local insertion = {}
+      for _, l in ipairs(typedef_block) do table.insert(insertion, l) end
+      for _, l in ipairs(type_line) do table.insert(insertion, l) end
+      vim.api.nvim_buf_set_lines(bufnr, current_line - 1, current_line - 1, false, insertion)
+      vim.notify("[jsdoc-props] Generated new typedef for " .. component_name, vim.log.levels.INFO)
    end
 end
 
--- Support auto.lua (run for specific line)
+---------------------------------------------------------------------
+-- Auto mode support
+---------------------------------------------------------------------
 function M.run_for_line(bufnr, line_nr)
    bufnr = bufnr or vim.api.nvim_get_current_buf()
    local line = vim.api.nvim_buf_get_lines(bufnr, line_nr - 1, line_nr, false)[1]
    if not line then return end
-
    local cursor_backup = vim.api.nvim_win_get_cursor(0)
    vim.api.nvim_win_set_cursor(0, { line_nr, 0 })
    local ok, err = pcall(M.run)
