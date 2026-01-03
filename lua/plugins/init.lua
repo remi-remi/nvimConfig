@@ -32,4 +32,3 @@ require("lazy").setup({
 })
 
 require("plugins.convertDefaultToNamed")
-require("plugins.jsdoc-props")
