@@ -18,7 +18,7 @@ require("core.theme")
 require("core.adoc-compile-on-save").setup()
 require("core.diagnostic-config")
 require("core.createDirOnSaveIfNotExist")
-require("core.jsconfig-auto").ensure_jsconfig()
+-- require("core.jsconfig-auto").ensure_jsconfig() -- if not simple node js stack, obsolete, may be removed, learn jsdoc is a better alternative
 require("core.wl-tools")
 require("core.wl-copy")
 require("core.formatOnSave")
