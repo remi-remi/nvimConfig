@@ -4,7 +4,7 @@ return {
    config = function()
       local wk = require("which-key")
       wk.setup({
-         preset = "classic" -- classic modern helix
+         preset = "classic" -- classic,modern,helix
       })
 
       wk.add({
