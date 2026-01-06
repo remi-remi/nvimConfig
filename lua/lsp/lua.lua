@@ -1,22 +1,16 @@
-local lspconfig = require("lspconfig")
-
-lspconfig.lua_ls.setup({
-  settings = {
-    Lua = {
-      runtime = {
-        version = 'LuaJIT',
+return {
+   cmd = { "lua-language-server" },
+   filetypes = { "lua" },
+   settings = {
+      Lua = {
+         runtime = { version = "LuaJIT" },
+         diagnostics = { globals = { "vim" } },
+         workspace = {
+            library = vim.api.nvim_get_runtime_file("", true),
+            checkThirdParty = false,
+         },
+         telemetry = { enable = false },
       },
-      diagnostics = {
-        globals = { 'vim' }, -- Recognize the `vim` global
-      },
-      workspace = {
-        library = vim.api.nvim_get_runtime_file("", true),
-        checkThirdParty = false,
-      },
-      telemetry = {
-        enable = false,
-      },
-    },
-  }
-})
+   },
+}
 

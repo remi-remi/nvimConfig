@@ -1,12 +1,9 @@
-local lspconfig = require("lspconfig")
-local util = require("lspconfig.util")
-
 -- shared capabilities from cmp
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
 -- shared on_attach
 local function on_attach(client, bufnr)
-   --  vim.notify("LSP attached: " .. client.name, vim.log.levels.INFO)
+   vim.notify("LSP attached: " .. client.name, vim.log.levels.INFO)
 
    local opts = { noremap = true, silent = true, buffer = bufnr }
    local map = vim.keymap.set
@@ -22,14 +19,14 @@ local function on_attach(client, bufnr)
    map("n", "<space>f", function() vim.lsp.buf.format({ async = true }) end, opts)
 end
 
-lspconfig.vtsls.setup({
+return {
+   cmd = { "vtsls", "--stdio" },
    capabilities = capabilities,
    on_attach = on_attach,
    filetypes = {
       "javascript", "javascriptreact",
       "typescript", "typescriptreact",
    },
-   root_dir = util.root_pattern("package.json", "tsconfig.json", "jsconfig.json", ".git"),
 
    settings = {
       typescript = {
@@ -54,4 +51,4 @@ lspconfig.vtsls.setup({
          },
       },
    }
-})
+}

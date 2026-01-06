@@ -1,6 +1,15 @@
--- DONT BE CONFUSED, in lua  . is used instead of / and we dont use extensions
-require("lsp.lua")
-require("lsp.js")
-require("lsp.eslint")
-require("lsp.css")
-require("lsp.bash")
+local lsps = {
+   { "bashls", require("lsp.bash") },
+   { "lua_ls", require("lsp.lua") },
+   { "cssls",  require("lsp.css") },
+   { "eslint", require("lsp.eslint") },
+   { "vtsls",  require("lsp.js") },
+}
+
+for _, lsp in ipairs(lsps) do
+   local name, config = lsp[1], lsp[2]
+   if config then
+      vim.lsp.config(name, config)
+   end
+   vim.lsp.enable(name)
+end

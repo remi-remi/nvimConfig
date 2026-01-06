@@ -23,7 +23,7 @@ require("lazy").setup({
    require("plugins.completion"),
    require("plugins.telescope"),
    require("plugins.lualine"),
-   require("plugins.prettier"),
+   require("plugins.conform"),
    require("plugins.vim-visual-multi"),
    require("plugins.precognition"),
    require("plugins.lua-snip"),

@@ -1,13 +1,13 @@
--- Supprime le warning "deprecated require('lspconfig')" jusqu'à la migration v3
-local old_notify = vim.notify
-vim.notify = function(msg, level, opts)
-   if type(msg) == "string"
-       and msg:match("The `require%('lspconfig'%)` \"framework\" is deprecated") then
-      return
-   end
-   old_notify(msg, level, opts)
-end
-
+-- -- Supprime le warning "deprecated require('lspconfig')" jusqu'à la migration v3
+-- local old_notify = vim.notify
+-- vim.notify = function(msg, level, opts)
+--    if type(msg) == "string"
+--        and msg:match("The `require%('lspconfig'%)` \"framework\" is deprecated") then
+--       return
+--    end
+--    old_notify(msg, level, opts)
+-- end
+--
 
 -- Load plugins
 require("plugins.init")

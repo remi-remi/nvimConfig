@@ -1,4 +1,5 @@
 local cmp = require("cmp")
+local luasnip = require("luasnip")
 -- Setup for `/`
 cmp.setup.cmdline('/', {
    mapping = cmp.mapping.preset.cmdline(),
@@ -8,7 +9,6 @@ cmp.setup.cmdline('/', {
 })
 
 -- filename source
-
 local filename_source = {}
 
 filename_source.new = function()
@@ -51,16 +51,21 @@ return {
       ['<C-Space>'] = cmp.mapping.complete(),
       ['<C-e>'] = cmp.mapping.abort(),
       ['<CR>'] = cmp.mapping.confirm({ select = true }),
-      ['<Tab>'] = cmp.mapping(function(fallback)
+      ["<Tab>"] = cmp.mapping(function(fallback)
          if cmp.visible() then
             cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+         elseif luasnip.expand_or_jumpable() then
+            luasnip.expand_or_jump()
          else
             fallback()
          end
       end, { "i", "s" }),
-      ['<S-Tab>'] = cmp.mapping(function(fallback)
+
+      ["<S-Tab>"] = cmp.mapping(function(fallback)
          if cmp.visible() then
             cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
+         elseif luasnip.jumpable(-1) then
+            luasnip.jump(-1)
          else
             fallback()
          end
@@ -76,7 +81,7 @@ return {
    }),
 
    experimental = {
-      ghost_text = false,
+      ghost_text = true,
    },
 
    formatting = {
@@ -123,8 +128,21 @@ return {
       end,
    },
 
+   -- since 06-01-2026 cmp.window decoration seem broken, or tight to vim, this is a workaround
+   vim.api.nvim_set_hl(0, "CmpBorder", { fg = "#589ed7" }),
+   vim.api.nvim_set_hl(0, "CmpDocBorder", { fg = "#589ed7" }),
+   vim.api.nvim_set_hl(0, "CmpNormal", { link = "NormalFloat" }),
+   vim.api.nvim_set_hl(0, "CmpDocNormal", { link = "NormalFloat" }),
+
    window = {
-      completion = cmp.config.window.bordered(),
-      documentation = cmp.config.window.bordered(),
+      completion = {
+         border = "rounded",
+         winhighlight = "Normal:CmpNormal,FloatBorder:CmpBorder",
+      },
+      documentation = {
+         border = "rounded",
+         winhighlight = "Normal:CmpDocNormal,FloatBorder:CmpDocBorder",
+      },
    },
+
 }

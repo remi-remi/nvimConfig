@@ -1,2 +1,5 @@
-local lspconfig = require("lspconfig")
-lspconfig.bashls.setup({})
+return{
+   cmd = { "bash-language-server", "start" },
+   filetypes = { "sh", "bash" },
+}
+
