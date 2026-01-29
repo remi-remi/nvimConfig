@@ -1,7 +1,6 @@
 local util = vim.fs
 
 return {
-   cmd = { "vscode-eslint-language-server", "--stdio" },
    filetypes = {
       "javascript",
       "javascriptreact",

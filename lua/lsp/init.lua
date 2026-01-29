@@ -1,5 +1,5 @@
 local lsps = {
-   { "bashls", require("lsp.bash") },
+   { "bashls", {} },
    { "lua_ls", require("lsp.lua") },
    { "cssls",  require("lsp.css") },
    { "eslint", require("lsp.eslint") },

@@ -20,14 +20,8 @@ local function on_attach(client, bufnr)
 end
 
 return {
-   cmd = { "vtsls", "--stdio" },
    capabilities = capabilities,
    on_attach = on_attach,
-   filetypes = {
-      "javascript", "javascriptreact",
-      "typescript", "typescriptreact",
-   },
-
    settings = {
       typescript = {
          suggest = {
