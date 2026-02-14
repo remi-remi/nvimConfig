@@ -1,1 +1,0 @@
-{"exclude": ["node_modules"], "include": ["src/**/*", "**/*.js", "**/*.jsx"], "compilerOptions": {"jsx": "react-jsx", "allowSyntheticDefaultImports": true, "checkJs": true, "allowJs": true, "paths": {"*": ["node_modules/*"]}, "baseUrl": "."}}
