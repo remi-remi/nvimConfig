@@ -14,7 +14,7 @@ return {
          { "<leader>lpd", "<cmd>Lspsaga peek_definition<CR>",         desc = "Peek Definition" },
          { "<leader>lh",  "<cmd>Lspsaga hover_doc<CR>",               desc = "Hover Doc" },
          { "<leader>lf",  "<cmd>Lspsaga finder<CR>",                  desc = "Finder" },
-         { "<leader>lr",  "<cmd>Lspsaga rename<CR>",                  desc = "Rename" },
+         { "<leader>lr",  "<cmd>Lspsaga rename ++project<CR>",        desc = "Rename ++project" },
          { "<leader>la",  "<cmd>Lspsaga code_action<CR>",             desc = "Code Action" },
          { "<leader>lD",  "<cmd>Lspsaga show_line_diagnostics<CR>",   desc = "Line Diagnostics" },
          { "<leader>lc",  "<cmd>Lspsaga show_cursor_diagnostics<CR>", desc = "Cursor Diagnostics" },
