@@ -13,6 +13,7 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
    require("plugins.indent-blankline"),
    require("plugins.oneDark"),
+   require("plugins.cappucin"),
    require("plugins.tokyonight"),
    require("plugins.nvim-web-devicons"),
    require("plugins.nvim-tree"),
