@@ -5,6 +5,9 @@ return {
          lightbulb = {
             enable = false,
          },
+         ui = {
+            border = { "+", "-", "+", "|", "+", "-", "+", "|" }, -- SQL style
+         },
       })
    end,
 }
