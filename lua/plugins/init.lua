@@ -18,9 +18,8 @@ require("lazy").setup({
    require("plugins.nvim-web-devicons"),
    require("plugins.nvim-tree"),
    require("plugins.nvim-colorizer"),
-   require("plugins.nvim-treesitter"),
+   require("plugins.treesitter"),
    require("plugins.mason"),
-   -- require("plugins.mason-lspconfig"),
    require("plugins.completion"),
    require("plugins.telescope"),
    require("plugins.lualine"),
@@ -31,6 +30,7 @@ require("lazy").setup({
    require("plugins.lspsaga"),
    require("plugins.which-key"),
    require("plugins.lspconfig"),
+   require("plugins.swapDiff"),
 })
 
 require("plugins.convertDefaultToNamed")

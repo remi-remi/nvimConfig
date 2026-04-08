@@ -5,14 +5,13 @@ vim.cmd("syntax on")
 vim.g.mapleader = ' '
 
 -- UI
-vim.opt.number = true          -- Show line numbers
-vim.opt.relativenumber = false -- Show relative line numbers
-vim.opt.cursorline = true      -- Highlight current line
-vim.opt.signcolumn = 'yes'     -- Always show sign column
-vim.opt.scrolloff = 5          -- Keep 5 lines visible above/below cursor
-vim.opt.termguicolors = true   -- Enable true colors in terminal
-vim.opt.wrap = false           -- Disable line wrapping
-vim.opt.mouse = 'a'            -- Enable mouse in all modes
+vim.opt.number = true        -- Show line numbers
+vim.opt.cursorline = true    -- Highlight current line
+vim.opt.signcolumn = 'yes'   -- Always show sign column
+vim.opt.scrolloff = 5        -- Keep 5 lines visible above/below cursor
+vim.opt.termguicolors = true -- Enable true colors in terminal
+vim.opt.wrap = false         -- Disable line wrapping
+vim.opt.mouse = 'a'          -- Enable mouse in all modes
 
 -- Encoding
 vim.opt.encoding = 'utf-8'     -- Set internal encoding

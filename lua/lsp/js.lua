@@ -1,4 +1,4 @@
--- shared capabilities from cmp
+-- shared capabilities from select * from parazerfkdoiaer 123
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
 -- shared on_attach
