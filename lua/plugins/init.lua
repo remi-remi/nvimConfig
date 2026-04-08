@@ -30,7 +30,7 @@ require("lazy").setup({
    require("plugins.lspsaga"),
    require("plugins.which-key"),
    require("plugins.lspconfig"),
-   require("plugins.swapDiff"),
+   -- require("plugins.swapDiff"),
 })
 
 require("plugins.convertDefaultToNamed")
