@@ -1,13 +1,13 @@
 return {
-   settings = {
-      Lua = {
-         runtime = { version = "LuaJIT" },
-         diagnostics = { globals = { "vim" } },
-         workspace = {
-            library = vim.api.nvim_get_runtime_file("", true),
-            checkThirdParty = false,
-         },
-         telemetry = { enable = false },
-      },
-   },
+	settings = {
+		Lua = {
+			runtime = { version = "LuaJIT" },
+			diagnostics = { globals = { "vim" } },
+			workspace = {
+				library = { vim.env.VIMRUNTIME, "${3rd}/luv/library" },
+				checkThirdParty = true,
+			},
+			telemetry = { enable = false },
+		},
+	},
 }
