@@ -14,6 +14,13 @@ for _, lsp in ipairs(lsps) do
 	vim.lsp.enable(name)
 end
 
+vim.api.nvim_create_autocmd("LspAttach", {
+	callback = function(args)
+		local client = vim.lsp.get_client_by_id(args.data.client_id)
+		vim.notify("LSP started: " .. client.name, vim.log.levels.INFO)
+	end,
+})
+
 -- when a file is directly open, .enable happen too late to detect the filetype
 -- fixed by checking the filetype after configuration
 vim.cmd("filetype detect")

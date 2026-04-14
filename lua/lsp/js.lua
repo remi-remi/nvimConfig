@@ -3,8 +3,6 @@ local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
 -- shared on_attach
 local function on_attach(client, bufnr)
-   vim.notify("LSP attached: " .. client.name, vim.log.levels.INFO)
-
    local opts = { noremap = true, silent = true, buffer = bufnr }
    local map = vim.keymap.set
 
@@ -16,7 +14,9 @@ local function on_attach(client, bufnr)
    map("n", "<leader>d", vim.diagnostic.open_float, opts)
    map("n", "[d", vim.diagnostic.goto_prev, opts) -- vim.diagnostic.goto_prev is deprecated
    map("n", "]d", vim.diagnostic.goto_next, opts)
-   map("n", "<space>f", function() vim.lsp.buf.format({ async = true }) end, opts)
+   map("n", "<space>f", function()
+      vim.lsp.buf.format({ async = true })
+   end, opts)
 end
 
 return {
@@ -44,5 +44,5 @@ return {
             quoteStyle = "auto",
          },
       },
-   }
+   },
 }
