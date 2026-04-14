@@ -10,8 +10,10 @@ return {
    root_dir = function(fname)
       return util.root(fname, {
          "eslint.config.js",
+         "eslint.config.ts",
          ".eslintrc",
          ".eslintrc.js",
+         ".eslintrc.ts",
          ".eslintrc.cjs",
          ".eslintrc.json",
          "package.json",
