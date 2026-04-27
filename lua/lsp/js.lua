@@ -3,46 +3,43 @@ local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
 -- shared on_attach
 local function on_attach(client, bufnr)
-   local opts = { noremap = true, silent = true, buffer = bufnr }
-   local map = vim.keymap.set
+	local opts = { noremap = true, silent = true, buffer = bufnr }
+	local map = vim.keymap.set
 
-   map("n", "gd", "<cmd>Telescope lsp_definitions<CR>", opts)
-   map("n", "gr", "<cmd>Telescope lsp_references<CR>", opts)
-   map("n", "gi", "<cmd>Telescope lsp_implementations<CR>", opts)
-   map("n", "<leader>rn", vim.lsp.buf.rename, opts)
-   map("n", "<leader>ca", vim.lsp.buf.code_action, opts)
-   map("n", "<leader>d", vim.diagnostic.open_float, opts)
-   map("n", "[d", vim.diagnostic.goto_prev, opts) -- vim.diagnostic.goto_prev is deprecated
-   map("n", "]d", vim.diagnostic.goto_next, opts)
-   map("n", "<space>f", function()
-      vim.lsp.buf.format({ async = true })
-   end, opts)
+	map("n", "gd", "<cmd>Telescope lsp_definitions<CR>", opts)
+	map("n", "gr", "<cmd>Telescope lsp_references<CR>", opts)
+	map("n", "gi", "<cmd>Telescope lsp_implementations<CR>", opts)
+	map("n", "<leader>rn", vim.lsp.buf.rename, opts)
+	map("n", "<leader>ca", vim.lsp.buf.code_action, opts)
+	map("n", "<leader>d", vim.diagnostic.open_float, opts)
+	map("n", "[d", vim.diagnostic.goto_prev, opts) -- vim.diagnostic.goto_prev is deprecated
+	map("n", "]d", vim.diagnostic.goto_next, opts)
+	map("n", "<space>f", function()
+		vim.lsp.buf.format({ async = true })
+	end, opts)
 end
 
 return {
-   capabilities = capabilities,
-   on_attach = on_attach,
-   settings = {
-      typescript = {
-         suggest = {
-            autoImports = true,
-         },
-         preferences = {
-            importModuleSpecifier = "auto",
-            importModuleSpecifierEnding = "js",
-            quoteStyle = "auto",
-         },
-      },
-      javascript = {
-         inlayHints = { parameterNames = { enabled = "all" } },
-         format = {
-            enable = true,
-         },
-         preferences = {
-            importModuleSpecifier = "auto",
-            importModuleSpecifierEnding = "js",
-            quoteStyle = "auto",
-         },
-      },
-   },
+	capabilities = capabilities,
+	on_attach = on_attach,
+	settings = {
+		typescript = {
+			suggest = { autoImports = true },
+			inlayHints = { parameterNames = { enabled = "all" } },
+			preferences = {
+				importModuleSpecifier = "auto",
+				importModuleSpecifierEnding = "auto",
+				quoteStyle = "auto",
+			},
+		},
+		javascript = {
+			suggest = { autoImports = true },
+			inlayHints = { parameterNames = { enabled = "all" } },
+			preferences = {
+				importModuleSpecifier = "auto",
+				importModuleSpecifierEnding = "auto",
+				quoteStyle = "auto",
+			},
+		},
+	},
 }
