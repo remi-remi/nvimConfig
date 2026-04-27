@@ -33,9 +33,11 @@ require("lazy").setup({
 	require("plugins.lspsaga"),
 	require("plugins.which-key"),
 	require("plugins.lspconfig"),
-	require("plugins.markdown-plus"),
-	require("plugins.render-markdown"),
-	require("plugins.vim-table-mode"),
+
+	require("plugins.markdown.markdown-plus"),
+	require("plugins.markdown.render-markdown"),
+	require("plugins.markdown.vim-table-mode"),
+	require("plugins.markdown.aerial"),
 	-- require("plugins.swapDiff"),
 })
 
