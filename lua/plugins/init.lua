@@ -38,6 +38,9 @@ require("lazy").setup({
 	require("plugins.markdown.render-markdown"),
 	require("plugins.markdown.vim-table-mode"),
 	require("plugins.markdown.aerial"),
+
+	require("plugins.better-type-hover"),
+
 	-- require("plugins.swapDiff"),
 })
 
