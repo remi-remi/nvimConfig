@@ -5,6 +5,28 @@ return {
    build = ":TSUpdate",
    -- Détection Arch Linux seulement
    config = function()
+      local is_arch = vim.fn.executable("pacman") == 1
+      local version = vim.version()
+      local major, minor = version.major, version.minor
+
+      -- Condition corrigée (> 0.11.x)
+      if is_arch and (major > 0 or (major == 0 and minor > 11)) then
+         vim.api.nvim_echo({
+            {
+               "⚠️  Neovim v" .. major .. "." .. minor .. "." .. version.patch .. " detected",
+               "WarningMsg",
+            },
+            { " → Downgrade to 0.11.6 required!", "ErrorMsg" },
+            { " (Arch ship tree-sitter with ABI-v14, nvim 0.12 needs ABIv15, breaking)", "Normal" },
+            { "use the downgrade package on neovim then same with tree-sitter", "Normal" },
+            { "\nPress [ENTER] to continue anyway or [q] to quit...", "Comment" },
+         }, false, {}) -- false = no history
+
+         -- BLOQUE jusqu'à touche
+         vim.fn.getchar()
+         vim.cmd("redraw!") -- Nettoie écran
+      end
+
       vim.opt.runtimepath:prepend(vim.fn.stdpath("data") .. "/lazy/nvim-treesitter")
 
       require("nvim-treesitter.configs").setup({
