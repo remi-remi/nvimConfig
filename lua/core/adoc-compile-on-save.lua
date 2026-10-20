@@ -21,16 +21,12 @@ function M.compile_adoc()
       vim.schedule(function()
          if res.code == 0 then
             vim.notify(
-               theme_used and "Compilation PDF réussie avec le thème personnalisé !"
-               or "Compilation PDF réussie sans thème personnalisé."
+               theme_used and "PDF compilation successful with custom theme!"
+               or "PDF compilation successful without custom theme."
             )
          else
             vim.notify(
-               ("Erreur lors de la compilation (code %d):\n%s%s"):format(
-                  res.code,
-                  res.stdout or "",
-                  res.stderr or ""
-               ),
+               ("Compilation failed (exit code %d):\n%s%s"):format(res.code, res.stdout or "", res.stderr or ""),
                vim.log.levels.ERROR
             )
          end
