@@ -12,6 +12,7 @@ require("core.wl-tools")
 require("core.wl-copy")
 require("core.formatOnSave")
 require("core.lineNumber")
+require("core.neovideZoom")
 
 -- Load LSP
 require("lsp.init")
